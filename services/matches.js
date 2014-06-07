@@ -10,10 +10,10 @@ var matches = {
 
 var getMatches = function (callback) {
   var isAfter = moment().isAfter(matches.age); // Has it been 1 hour since last "scrape" ?
-  if (!isAfter) {
+  if (isAfter) {
     matches.age = moment().add(1, 'hour');
     // Update dataset
-    request('http://es.fifa.com/worldcup/matches/', function (error, response, body) {
+    request('http://en.fifa.com/worldcup/matches/', function (error, response, body) {
       var newMatches = [];
       if (!error && response.statusCode == 200) {
         var $ = cheerio.load(body);
@@ -23,12 +23,12 @@ var getMatches = function (callback) {
             var m = {
                 date: moment($(e).find('.mu-i-datetime').text().trim(), 'DD MMM. AAAA - HH:mm').format(), // This date is parsed with the server Timezone, so be careful
                 group:$(e).find('div.mu-i-group').text(),
-                matchnum: $(e).find('div.mu-i-matchnum').text(),
+                matchnum: $(e).find('div.mu-i-matchnum').text().match(/\d/g).join(''),
                 stadium: $(e).find('div.mu-i-stadium').text(),
                 venue:$(e).find('div.mu-i-venue').text(),
-                home: $(e).find('div.t.home span.t-nText').text(),
+                home: $(e).find('div.t.home span.t-nText').text().toLowerCase(),
                 homeflag: $(e).find('div.t.home img').attr('src'),
-                away: $(e).find('div.t.away span.t-nText').text(),
+                away: $(e).find('div.t.away span.t-nText').text().toLowerCase(),
                 awayflag: $(e).find('div.t.away img').attr('src'),
             };
             newMatches.push(m);

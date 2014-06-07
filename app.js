@@ -37,6 +37,7 @@ var matches = require('./routes/api/matches');
 
 app.get('/api/v1/matches/all', matches.all);
 app.get('/api/v1/matches/upcoming', matches.upcoming);
+app.get('/api/v1/matches/upcoming/:team', matches.upcomingTeam);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

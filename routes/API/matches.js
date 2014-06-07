@@ -1,5 +1,6 @@
 var matches = require("../../services/matches"),
-    moment = require('moment');
+    moment = require('moment'),
+    _ = require('underscore');
 
 // Helper
 var nextMatch = function(date, matches) {
@@ -28,7 +29,6 @@ exports.all = function(req, res){
   });
 };
 
-
 exports.upcoming = function(req, res){
   var date;
   if (req.query.date) {
@@ -43,9 +43,37 @@ exports.upcoming = function(req, res){
         error: err
       });
     } else {
-      var next = nextMatch(date.format('X'), matches);
-      console.log(moment(next.date).format());
-      res.json(next);
+      res.json(nextMatch(date.format('X'), matches));
     }
   });
+};
+
+exports.upcomingTeam = function(req, res){
+  var date, team, filteredMatches;
+  if (req.query.date) {
+    date = moment(+req.query.date);
+  } else {
+    date = moment();
+  }
+
+  if (req.params.team) {
+    team = req.params.team;
+
+    matches(function (err, matches) {
+      if(err) {
+        res.status(500);
+        res.json({
+          error: err
+        });
+      } else {
+        // Filter Matches by team.
+        filteredMatches = _.where(matches, {home: team}).concat(_.where(matches, {away: team}));
+        // Return closest match to date   
+        res.json(nextMatch(date.format('X'), filteredMatches));
+      }
+    });
+  } else {
+    res.status(500);
+    res.json({error: "You need to add a team"});
+  }
 };
