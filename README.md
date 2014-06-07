@@ -7,14 +7,11 @@ v1
 * Script js para scrapear en el navegador.
 * json estatico con todos los partidos de la primera fase.
 * API!
-	* /all 		--Todos los partidos primera fase.
-	* /upcoming 	--Solo partido inaugural
+	* /all 		-- Todos los partidos (Incluidos los no jugados, pero estos vienen sin info de equipos)
+	* /upcoming?date={date} 	-- El partido mas proximo a la fecha enviada por querystring (usa la del server si se omite)
 
 Proximos features
 ==
 * API
-	* /upcoming : Construir el manejo de fechas
 	* /upcoming/group/{letter}
 	* /upcoming/team/{name}
-
-* Dynamic Scraper por dia.
