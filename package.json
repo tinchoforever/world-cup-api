@@ -6,7 +6,11 @@
     "start": "node app.js"
   },
   "dependencies": {
+    "cheerio": "^0.16.0",
     "express": "3.2.1",
-    "jade": "*"
+    "jade": "*",
+    "moment": "^2.6.0",
+    "request": "^2.36.0",
+    "underscore": "^1.6.0"
   }
 }
